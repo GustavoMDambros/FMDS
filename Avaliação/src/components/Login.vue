@@ -1,65 +1,98 @@
 <template>
-  <div id="login">
-    <h1 :style="'color:' + props.color">Autenticação</h1>
-    <input type="text" placeholder="Usuário" v-model="user" />
-    <input type="password" placeholder="Senha" v-model="pass" />
-    <button @click="login">Entrar</button>
+  <div id="login-container">
+    <div id="login">
+      <h1 :style="'color:' + props.color">LOGIN</h1>
 
-    <ul>
+      <input
+        type="text"
+        placeholder="Usuário"
+        v-model="user"
+        :style="{ color: 'black', backgroundColor: 'white' }"
+      />
+      <input
+        type="password"
+        placeholder="Senha"
+        v-model="pass"
+        :style="{ color: 'black', backgroundColor: 'white' }"
+      />
 
-    </ul>
+      <button @click="login">Entrar</button>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, watch, watchEffect } from 'vue'
-import { useRouter } from 'vue-router' // 🚨 IMPORTANTE para navegação
+import { ref, defineProps, defineEmits } from 'vue'
+import { useRouter } from 'vue-router'
 
 const emits = defineEmits(['authenticated'])
 const props = defineProps({ color: String })
-const router = useRouter() // 🚀 Instância do roteador
+const router = useRouter()
 
 const user = ref('')
 const pass = ref('')
-const check = ref({
-  size: false,
-  lowercase: false,
-  uppercase: false,
-  number: false,
-  special: false
-})
 
 const login = () => {
   if (user.value === 'teste' && pass.value === '123') {
     emits('authenticated', true)
-    router.push('/') // 👉 Redireciona para a página index.vue
+    router.push('/')
   }
 }
-
-watch(pass, (value) => {
-  check.value.size = value.length > 6
-  check.value.lowercase = /[a-z]/.test(value)
-  check.value.uppercase = /[A-Z]/.test(value)
-  check.value.number = /[0-9]/.test(value)
-  check.value.special = /[^a-zA-Z0-9]/.test(value)
-})
-
-watchEffect(() => {
-  console.log('Senha:', pass.value)
-  console.log('Usuário:', user.value)
-  console.log('Tamanho:', check.value.size)
-})
 </script>
 
 <style>
+#login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #131212;
+}
+
 #login {
-  max-width: 700px;
-  margin: auto;
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+#login h1 {
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 input {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+input:focus {
+  border-color: #1976d2;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #1976d2;
+  color: white;
+  border: 2px solid #1976d2;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+button:hover {
+  background-color: #1565c0;
+  border-color: #1565c0;
 }
 </style>
